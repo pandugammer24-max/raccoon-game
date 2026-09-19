@@ -158,7 +158,7 @@
 
     <div id="airdrop-view" class="view-section">
         <div class="page-title">Airdrop Tasks</div><div class="airdrop-banner"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png"></div>
-        <div class="invite-btn" style="background:#1c1f24; border:1px solid #3a3f47; color:#fff;" onclick="alert('TON Wallet connection coming soon!')">🔗 Connect TON Wallet</div>
+        <div class="invite-btn" style="background:#1c1f24; border:1px solid #3a3f47; color:#fff;" onclick="customAlert('TON Wallet connection coming soon!')">🔗 Connect TON Wallet</div>
     </div>
 
     <div class="bottom-nav">
@@ -172,6 +172,15 @@
     <script>
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg && tg.expand) { tg.expand(); }
+
+        // --- NEW NATIVE POPUP FUNCTION ---
+        function customAlert(msg) {
+            if (tg && tg.showAlert) {
+                tg.showAlert(msg); // 100% Native, No GitHub URL
+            } else {
+                alert(msg);
+            }
+        }
         
         const urlParams = new URLSearchParams(window.location.search);
         const ceoName = urlParams.get('ceo');
@@ -184,28 +193,20 @@
             document.getElementById('user-avatar').innerText = tg.initDataUnsafe.user.first_name.charAt(0).toUpperCase();
         }
 
-        // --- LOCAL STORAGE DATA LOAD ---
         let storedBalance = localStorage.getItem('balance');
         let balance = storedBalance ? parseFloat(storedBalance) : 0.00000;
-        
         let storedEnergy = localStorage.getItem('energy');
         let energy = storedEnergy ? parseInt(storedEnergy) : 1000;
-        
         let storedMax = localStorage.getItem('maxEnergy');
         let maxEnergy = storedMax ? parseInt(storedMax) : 1000;
-        
         let storedMT = localStorage.getItem('multitapLevel');
         let multitapLevel = storedMT ? parseInt(storedMT) : 1;
-        
         let storedEL = localStorage.getItem('elLevel');
         let elLevel = storedEL ? parseInt(storedEL) : 1;
-        
         let storedELCost = localStorage.getItem('elCost');
         let elCost = storedELCost ? parseInt(storedELCost) : 10;
-        
         let storedMTCost = localStorage.getItem('mtCost');
         let mtCost = storedMTCost ? parseInt(storedMTCost) : 10;
-        
         let storedLimits = localStorage.getItem('dailyEnergyLimits');
         let dailyEnergyLimits = storedLimits ? parseInt(storedLimits) : 3;
 
@@ -213,23 +214,18 @@
         const coinPriceUSD = 3.00; 
         const passiveSpeedSec = 0.0625 / 3600; 
 
-        // === OFFLINE BACKGROUND MINING LOGIC ===
         let lastLoginTime = localStorage.getItem('lastLoginTime');
         if (lastLoginTime) {
             let now = Date.now();
             let diffSeconds = (now - parseInt(lastLoginTime)) / 1000;
-            
-            // Agar 10 seconds se zyada app band rahi ho toh calculation karein
             if (diffSeconds > 10) {
                 let offlineCoins = diffSeconds * passiveSpeedSec;
-                let offlineEnergy = Math.floor(diffSeconds * 1); // 1 energy per second
-                
+                let offlineEnergy = Math.floor(diffSeconds * 1); 
                 balance += offlineCoins;
                 energy += offlineEnergy;
                 if (energy > maxEnergy) energy = maxEnergy;
-                
                 setTimeout(() => {
-                    alert(`🚀 Welcome back, CEO!\n\nApp background mein kaam kar rahi thi.\nAapne offline rehte hue ${offlineCoins.toFixed(5)} RCN kamaye hain! 💰`);
+                    customAlert(`🚀 Welcome back, CEO!\n\nApp background mein kaam kar rahi thi.\nAapne offline rehte hue ${offlineCoins.toFixed(5)} RCN kamaye hain! 💰`);
                 }, 1000);
             }
         }
@@ -249,7 +245,6 @@
         const earnPerTapText = document.getElementById('earn-per-tap-text');
         const maxEnergyText = document.getElementById('max-energy-text');
 
-        // --- SAVE DATA FUNCTION ---
         function saveGameData() {
             localStorage.setItem('balance', balance);
             localStorage.setItem('energy', energy);
@@ -259,7 +254,7 @@
             localStorage.setItem('elCost', elCost);
             localStorage.setItem('mtCost', mtCost);
             localStorage.setItem('dailyEnergyLimits', dailyEnergyLimits);
-            localStorage.setItem('lastLoginTime', Date.now()); // Waqt save ho raha hai
+            localStorage.setItem('lastLoginTime', Date.now()); 
         }
 
         function copyReferralLink() {
@@ -277,7 +272,7 @@
             document.body.removeChild(tempInput);
             
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            alert("✅ Invite link copied to clipboard!\n\n" + refLink);
+            customAlert("✅ Invite link copied to clipboard!\n\n" + refLink);
         }
 
         function formatNumber(num) {
@@ -387,7 +382,7 @@
                 updateBalanceDisplay();
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
                 closeBoost();
-            } else { alert("No more free energy left for today!"); }
+            } else { customAlert("No more free energy left for today!"); }
         }
 
         function buyMultitap() {
@@ -395,7 +390,7 @@
                 balance -= mtCost; multitapLevel++; mtCost = Math.floor(mtCost * 1.5); 
                 updateBalanceDisplay();
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            } else { alert("Not enough coins!"); }
+            } else { customAlert("Not enough coins!"); }
         }
 
         function buyEnergyLimit() {
@@ -403,7 +398,7 @@
                 balance -= elCost; elLevel++; maxEnergy += 500; elCost = Math.floor(elCost * 1.5);
                 updateBalanceDisplay(); energyEl.innerText = energy; energyBar.style.width = (energy / maxEnergy * 100) + '%'; 
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            } else { alert("Not enough coins!"); }
+            } else { customAlert("Not enough coins!"); }
         }
 
         function switchTab(tabId, element) {
