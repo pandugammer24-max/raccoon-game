@@ -75,9 +75,36 @@
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; background: #1c1f24; padding: 10px 15px; border-radius: 14px; color: #8e8e93; font-size: 11px; cursor: pointer; flex: 1; margin: 0 4px;}
         .nav-item.active { color: #fff; background: #2f343c; }
         .nav-icon { font-size: 20px; }
+
+        /* VIP CUSTOM ALERT STYLES (No Domain Name Ever!) */
+        .custom-alert-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 10000;
+        }
+        .custom-alert-overlay.active { display: flex; }
+        .custom-alert-box {
+            background: #1c1f24; width: 85%; max-width: 320px; border-radius: 18px; padding: 25px; text-align: center; 
+            border: 1px solid #3a3f47; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .custom-alert-msg { color: #fff; font-size: 15px; margin-bottom: 25px; white-space: pre-line; line-height: 1.5; }
+        .custom-alert-btn {
+            background: #007aff; color: #fff; border: none; padding: 14px 0; width: 100%; border-radius: 12px; 
+            font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s;
+        }
+        .custom-alert-btn:active { background: #005bb5; transform: scale(0.97); }
     </style>
 </head>
 <body>
+
+    <!-- VIP CUSTOM ALERT BOX -->
+    <div id="custom-alert" class="custom-alert-overlay">
+        <div class="custom-alert-box">
+            <div id="custom-alert-text" class="custom-alert-msg"></div>
+            <button class="custom-alert-btn" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
 
     <div id="boost-modal" class="modal-overlay">
         <div class="bottom-sheet">
@@ -173,12 +200,15 @@
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg && tg.expand) { tg.expand(); }
 
+        // THE ULTIMATE CUSTOM ALERT (NO MORE BROWSER DOMAINS)
         function customAlert(msg) {
-            if (tg && tg.showAlert) {
-                tg.showAlert(msg); 
-            } else {
-                alert(msg);
-            }
+            document.getElementById('custom-alert-text').innerText = msg;
+            document.getElementById('custom-alert').classList.add('active');
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('custom-alert').classList.remove('active');
         }
         
         const urlParams = new URLSearchParams(window.location.search);
@@ -213,7 +243,6 @@
         const coinPriceUSD = 3.00; 
         const passiveSpeedSec = 0.0625 / 3600; 
 
-        // Yahan maine English mein theek kar diya hai!
         let lastLoginTime = localStorage.getItem('lastLoginTime');
         if (lastLoginTime) {
             let now = Date.now();
@@ -271,7 +300,6 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
             
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
             customAlert("✅ Invite link copied to clipboard!\n\n" + refLink);
         }
 
