@@ -7,47 +7,35 @@
     <script src="https://telegram.org/js/telegram-web-app.js" async></script>
     <style>
         body { margin: 0 auto; padding: 0; background-color: #000000; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; user-select: none; overflow: hidden; display: flex; flex-direction: column; height: 100vh; max-width: 420px; position: relative; }
-
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
         .user-profile { display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 14px; }
         .user-profile .avatar { width: 28px; height: 28px; background: linear-gradient(45deg, #007aff, #00c6ff); border-radius: 5px; display: flex; justify-content: center; align-items: center; font-size: 16px; font-weight: bold;}
         .settings-btn { background: #272a2f; padding: 8px 12px; border-radius: 8px; font-size: 14px; color: #fff; border: 1px solid #3a3f47; }
-
         .view-section { display: none; flex-direction: column; flex-grow: 1; margin-bottom: 80px; overflow-y: auto; padding-bottom: 20px;}
         .view-section.active { display: flex; }
         .page-title { text-align: center; font-size: 28px; font-weight: bold; margin: 20px 0; }
-
-        /* --- MINE VIEW CSS --- */
         .stats-bar { display: flex; justify-content: space-between; margin: 0 15px; gap: 8px; }
         .stat-box { background-color: #272a2f; border-radius: 12px; padding: 10px; flex: 1; text-align: center; border: 1px solid #3a3f47; }
         .stat-label { font-size: 10px; color: #8e8e93; margin-bottom: 5px; font-weight: 500;}
         .stat-value { font-size: 13px; font-weight: bold; color: #fff; display: flex; justify-content: center; align-items: center; gap: 4px; }
         .stat-value.profit { color: #88e060; }
         .coin-icon-small { width: 14px; height: 14px; background: url('https://cdn-icons-png.flaticon.com/512/1490/1490853.png') center/cover; border-radius: 50%; display: inline-block; }
-
         .main-balance-container { text-align: center; margin-top: 30px; margin-bottom: 20px; }
         .main-balance { font-size: 42px; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 10px; }
         .usd-value { font-size: 16px; color: #8e8e93; font-weight: 600; margin-top: 5px; }
-        
         .level-info { display: flex; justify-content: space-between; padding: 12px 25px; margin: 0 20px 15px 20px; font-size: 14px; font-weight: 600; background: rgba(255,255,255,0.05); border-radius: 15px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; }
         .level-info:active { background: rgba(255,255,255,0.1); }
-        
         .coin-area { flex-grow: 1; display: flex; justify-content: center; align-items: center; position: relative; }
         .coin-outer { width: 260px; height: 260px; border-radius: 50%; background: linear-gradient(180deg, #182235 0%, #0d131f 100%); box-shadow: 0 0 15px rgba(42, 102, 255, 0.2), inset 0 0 20px rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; border: 4px solid #233454; }
         .coin-inner { width: 230px; height: 230px; border-radius: 50%; background: radial-gradient(circle, #2d4576 0%, #152033 100%); display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.1); transition: transform 0.05s; -webkit-tap-highlight-color: transparent; }
-        
         .coin-inner img { width: 130px; pointer-events: none; filter: drop-shadow(0px 15px 15px rgba(0,0,0,0.6)); }
         .coin-inner:active { transform: scale(0.94) translateY(4px); }
-
         .floating-text { position: fixed; font-size: 32px; font-weight: 900; color: #ffffff; text-shadow: 0 3px 6px rgba(0,0,0,0.6); pointer-events: none; animation: floatUp 0.8s ease-out forwards; z-index: 9999; }
         @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-120px) scale(1.3); } }
-        
         .energy-section { padding: 0 25px 15px 25px; }
         .bottom-stats { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .energy-bar-bg { width: 100%; height: 10px; background-color: #2c2c2e; border-radius: 10px; overflow: hidden; }
         .energy-bar-fill { width: 100%; height: 100%; background: linear-gradient(90deg, #ff9500, #ffcc00); transition: width 0.1s; box-shadow: 0 0 8px rgba(255, 149, 0, 0.4); }
-
-        /* --- MODAL CSS --- */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: flex-end; z-index: 1000; }
         .modal-overlay.active { display: flex; }
         .bottom-sheet { background: #1c1f24; width: 100%; max-width: 420px; max-height: 85vh; overflow-y: auto; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 25px; box-sizing: border-box; animation: slideUp 0.3s ease-out; }
@@ -58,8 +46,6 @@
         .boost-item { background: #272a2f; border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 12px; cursor: pointer; border: 1px solid #3a3f47; transition: 0.2s; }
         .boost-item:active { transform: scale(0.97); }
         .boost-cost { font-weight: bold; color: #f4c900; display: flex; align-items: center; gap: 5px; }
-
-        /* --- FRIENDS, EARN, AIRDROP CSS --- */
         .friends-desc { text-align: center; color: #8e8e93; font-size: 14px; padding: 0 20px; margin-bottom: 25px; }
         .reward-card { background: #1c1f24; border-radius: 12px; padding: 15px; margin: 0 20px 15px 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #2c2c2e; }
         .reward-icon img { width: 40px; }
@@ -85,8 +71,6 @@
         .airdrop-banner { text-align: center; margin: 30px 0; }
         .airdrop-banner img { width: 100px; }
         .airdrop-text { text-align: center; color: #8e8e93; font-size: 16px; padding: 0 30px; margin-bottom: 30px; line-height: 1.5; }
-
-        /* Bottom Navbar */
         .bottom-nav { display: flex; justify-content: space-around; background-color: #272a2f; padding: 12px 10px 25px 10px; border-top-left-radius: 20px; border-top-right-radius: 20px; position: absolute; bottom: 0; width: 100%; box-sizing: border-box; z-index: 100;}
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; background: #1c1f24; padding: 10px 15px; border-radius: 14px; color: #8e8e93; font-size: 11px; cursor: pointer; flex: 1; margin: 0 4px;}
         .nav-item.active { color: #fff; background: #2f343c; }
@@ -95,56 +79,24 @@
 </head>
 <body>
 
-    <!-- BOOST MODAL -->
     <div id="boost-modal" class="modal-overlay">
         <div class="bottom-sheet">
-            <div class="sheet-header">
-                <h3>Boosts</h3>
-                <div class="close-btn" onclick="closeBoost()">✕</div>
-            </div>
-            
+            <div class="sheet-header"><h3>Boosts</h3><div class="close-btn" onclick="closeBoost()">✕</div></div>
             <h4 style="color:#8e8e93; margin-top:0; margin-bottom: 10px;">Free daily boosters</h4>
-            <div class="boost-item" onclick="useFullEnergy()">
-                <div style="font-size:30px;">⚡</div>
-                <div>
-                    <div style="font-weight:bold; font-size:16px;">Full Energy</div>
-                    <div style="color:#8e8e93; font-size:13px;" id="daily-energy-text">3/3 available</div>
-                </div>
-            </div>
-
+            <div class="boost-item" onclick="useFullEnergy()"><div style="font-size:30px;">⚡</div><div><div style="font-weight:bold; font-size:16px;">Full Energy</div><div style="color:#8e8e93; font-size:13px;" id="daily-energy-text">3/3 available</div></div></div>
             <h4 style="color:#8e8e93; margin-bottom: 10px; margin-top: 25px;">Boosters</h4>
-            <div class="boost-item" onclick="buyMultitap()">
-                <div style="font-size:30px;">👆</div>
-                <div style="flex-grow:1;">
-                    <div style="font-weight:bold; font-size:16px;">Multitap</div>
-                    <div style="color:#8e8e93; font-size:13px;">Level <span id="mt-level">1</span></div>
-                </div>
-                <div class="boost-cost"><div class="coin-icon-small"></div> <span id="mt-cost">10</span></div>
-            </div>
-            
-            <div class="boost-item" onclick="buyEnergyLimit()">
-                <div style="font-size:30px;">🔋</div>
-                <div style="flex-grow:1;">
-                    <div style="font-weight:bold; font-size:16px;">Energy Limit</div>
-                    <div style="color:#8e8e93; font-size:13px;">Level <span id="el-level">1</span></div>
-                </div>
-                <div class="boost-cost"><div class="coin-icon-small"></div> <span id="el-cost">10</span></div>
-            </div>
+            <div class="boost-item" onclick="buyMultitap()"><div style="font-size:30px;">👆</div><div style="flex-grow:1;"><div style="font-weight:bold; font-size:16px;">Multitap</div><div style="color:#8e8e93; font-size:13px;">Level <span id="mt-level">1</span></div></div><div class="boost-cost"><div class="coin-icon-small"></div> <span id="mt-cost">10</span></div></div>
+            <div class="boost-item" onclick="buyEnergyLimit()"><div style="font-size:30px;">🔋</div><div style="flex-grow:1;"><div style="font-weight:bold; font-size:16px;">Energy Limit</div><div style="color:#8e8e93; font-size:13px;">Level <span id="el-level">1</span></div></div><div class="boost-cost"><div class="coin-icon-small"></div> <span id="el-cost">10</span></div></div>
         </div>
     </div>
 
-    <!-- LEAGUE MODAL -->
     <div id="league-modal" class="modal-overlay">
         <div class="bottom-sheet">
-            <div class="sheet-header">
-                <h3>Leagues</h3>
-                <div class="close-btn" onclick="closeLeague()">✕</div>
-            </div>
+            <div class="sheet-header"><h3>Leagues</h3><div class="close-btn" onclick="closeLeague()">✕</div></div>
             <div id="leagues-list"></div>
         </div>
     </div>
 
-    <!-- MAIN GAME UI -->
     <div class="header">
         <div class="user-profile">
             <div class="avatar" id="user-avatar">U</div>
@@ -153,7 +105,6 @@
         <div class="settings-btn">1 RCN = $3.00</div>
     </div>
 
-    <!-- 1. EXCHANGE VIEW -->
     <div id="exchange-view" class="view-section">
         <div class="page-title">Choose Exchange</div>
         <div class="ex-grid">
@@ -164,74 +115,38 @@
         </div>
     </div>
 
-    <!-- 2. MINE VIEW -->
     <div id="mine-view" class="view-section active">
         <div class="stats-bar">
-            <div class="stat-box">
-                <div class="stat-label">Earn per tap</div>
-                <!-- Updated base earn display to 0.00001 -->
-                <div class="stat-value"><div class="coin-icon-small"></div> +<span id="earn-per-tap-text">0.00001</span></div>
-            </div>
-            <div class="stat-box" style="flex: 1.1;">
-                <div class="stat-label">To upgrade level</div>
-                <div class="stat-value" id="upgrade-need-text">Need 1K</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-label">Profit per hour</div>
-                <!-- Updated profit per hour display to 0.0625 (which is 1.5 per 24 hours) -->
-                <div class="stat-value profit"><div class="coin-icon-small"></div> +0.0625</div>
-            </div>
+            <div class="stat-box"><div class="stat-label">Earn per tap</div><div class="stat-value"><div class="coin-icon-small"></div> +<span id="earn-per-tap-text">0.00001</span></div></div>
+            <div class="stat-box" style="flex: 1.1;"><div class="stat-label">To upgrade level</div><div class="stat-value" id="upgrade-need-text">Need 1K</div></div>
+            <div class="stat-box"><div class="stat-label">Profit per hour</div><div class="stat-value profit"><div class="coin-icon-small"></div> +0.0625</div></div>
         </div>
-
         <div class="main-balance-container">
-            <div class="main-balance">
-                <img src="https://cdn-icons-png.flaticon.com/512/1490/1490853.png" style="width: 45px;">
-                <!-- Updated to show 5 zeros so user can see every small addition -->
-                <span id="balance">0.00000</span>
-            </div>
+            <div class="main-balance"><img src="https://cdn-icons-png.flaticon.com/512/1490/1490853.png" style="width: 45px;"><span id="balance">0.00000</span></div>
             <div class="usd-value" id="usdValue">≈ $0.00</div>
         </div>
-
         <div class="level-info" onclick="openLeague()">
             <div style="color: #fff; display:flex; align-items:center; gap:5px;"><span id="league-name">Bronze</span> 〉</div>
             <div style="color: #8e8e93;" id="league-level">Level 1/10</div>
         </div>
-
         <div class="coin-area" id="touchArea">
-            <div class="coin-outer">
-                <div class="coin-inner" id="coin">
-                    <img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Raccoon/3D/raccoon_3d.png" alt="Raccoon">
-                </div>
-            </div>
+            <div class="coin-outer"><div class="coin-inner" id="coin"><img src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Raccoon/3D/raccoon_3d.png" alt="Raccoon"></div></div>
         </div>
-
         <div class="energy-section">
             <div class="bottom-stats">
                 <div style="display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: bold;">⚡ <span id="energy">1000</span> / <span id="max-energy-text">1000</span></div>
                 <div onclick="openBoost()" style="font-size: 16px; font-weight: bold; background: #272a2f; padding: 6px 15px; border-radius: 20px; cursor: pointer; border: 1px solid #3a3f47;">Boost 🚀</div>
             </div>
-            <div class="energy-bar-bg">
-                <div class="energy-bar-fill" id="energyBar"></div>
-            </div>
+            <div class="energy-bar-bg"><div class="energy-bar-fill" id="energyBar"></div></div>
         </div>
     </div>
 
-    <!-- 3. FRIENDS VIEW -->
     <div id="friends-view" class="view-section">
-        <div class="page-title">Invite Friends!</div>
-        <div class="friends-desc">Invite friends to get bonuses for both of you!</div>
-        <div class="reward-card">
-            <div class="reward-icon"><img src="https://cdn-icons-png.flaticon.com/512/4213/4213958.png"></div>
-            <div class="reward-info">
-                <div class="reward-title">Invite a friend</div>
-                <div class="reward-details"><span>For you:</span> <span class="highlight">+10% Speed</span></div>
-                <div class="reward-details"><span>For friend:</span> <span class="highlight-green">+0.1 RCN</span></div>
-            </div>
-        </div>
-        <div class="invite-btn" onclick="alert('Link Copied!')">🔗 Copy Invite Link</div>
+        <div class="page-title">Invite Friends!</div><div class="friends-desc">Invite friends to get bonuses for both of you!</div>
+        <div class="reward-card"><div class="reward-icon"><img src="https://cdn-icons-png.flaticon.com/512/4213/4213958.png"></div><div class="reward-info"><div class="reward-title">Invite a friend</div><div class="reward-details"><span>For you:</span> <span class="highlight">+10% Speed</span></div><div class="reward-details"><span>For friend:</span> <span class="highlight-green">+0.1 RCN</span></div></div></div>
+        <div class="invite-btn" onclick="copyReferralLink()">🔗 Copy Invite Link</div>
     </div>
 
-    <!-- 4. EARN VIEW -->
     <div id="earn-view" class="view-section">
         <div class="page-title">Earn More Coins</div>
         <div class="task-list">
@@ -241,14 +156,11 @@
         </div>
     </div>
 
-    <!-- 5. AIRDROP VIEW -->
     <div id="airdrop-view" class="view-section">
-        <div class="page-title">Airdrop Tasks</div>
-        <div class="airdrop-banner"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png"></div>
+        <div class="page-title">Airdrop Tasks</div><div class="airdrop-banner"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png"></div>
         <div class="invite-btn" style="background:#1c1f24; border:1px solid #3a3f47; color:#fff;" onclick="alert('TON Wallet connection coming soon!')">🔗 Connect TON Wallet</div>
     </div>
 
-    <!-- BOTTOM NAV -->
     <div class="bottom-nav">
         <div class="nav-item" onclick="switchTab('exchange', this)"><div class="nav-icon">🪙</div>Exchange</div>
         <div class="nav-item active" onclick="switchTab('mine', this)"><div class="nav-icon">⛏️</div>Mine</div>
@@ -260,41 +172,74 @@
     <script>
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg && tg.expand) { tg.expand(); }
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const ceoName = urlParams.get('ceo');
+        
+        if (ceoName) {
+            document.getElementById('user-name').innerText = ceoName;
+            document.getElementById('user-avatar').innerText = ceoName.charAt(0).toUpperCase();
+        } else if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
             document.getElementById('user-avatar').innerText = tg.initDataUnsafe.user.first_name.charAt(0).toUpperCase();
         }
 
-        // --- NEW UPDATED VARIABLES ---
-        let balance = 0.00000; 
-        let energy = 1000; 
-        let maxEnergy = 1000;
-        let multitapLevel = 1;
+        // --- LOCAL STORAGE DATA LOAD ---
+        let storedBalance = localStorage.getItem('balance');
+        let balance = storedBalance ? parseFloat(storedBalance) : 0.00000;
         
-        let baseEarn = 0.00001; // Updated to 0.00001
+        let storedEnergy = localStorage.getItem('energy');
+        let energy = storedEnergy ? parseInt(storedEnergy) : 1000;
+        
+        let storedMax = localStorage.getItem('maxEnergy');
+        let maxEnergy = storedMax ? parseInt(storedMax) : 1000;
+        
+        let storedMT = localStorage.getItem('multitapLevel');
+        let multitapLevel = storedMT ? parseInt(storedMT) : 1;
+        
+        let storedEL = localStorage.getItem('elLevel');
+        let elLevel = storedEL ? parseInt(storedEL) : 1;
+        
+        let storedELCost = localStorage.getItem('elCost');
+        let elCost = storedELCost ? parseInt(storedELCost) : 10;
+        
+        let storedMTCost = localStorage.getItem('mtCost');
+        let mtCost = storedMTCost ? parseInt(storedMTCost) : 10;
+        
+        let storedLimits = localStorage.getItem('dailyEnergyLimits');
+        let dailyEnergyLimits = storedLimits ? parseInt(storedLimits) : 3;
+
+        let baseEarn = 0.00001; 
         const coinPriceUSD = 3.00; 
-        
-        // Exact 1.5 Coins per 24 hours
-        // 1.5 / 24 = 0.0625 coins per hour
-        // 0.0625 / 3600 = 0.0000173611 coins per second
         const passiveSpeedSec = 0.0625 / 3600; 
-        
-        let dailyEnergyLimits = 3;
-        let mtCost = 10;
-        let elLevel = 1;
-        let elCost = 10;
+
+        // === OFFLINE BACKGROUND MINING LOGIC ===
+        let lastLoginTime = localStorage.getItem('lastLoginTime');
+        if (lastLoginTime) {
+            let now = Date.now();
+            let diffSeconds = (now - parseInt(lastLoginTime)) / 1000;
+            
+            // Agar 10 seconds se zyada app band rahi ho toh calculation karein
+            if (diffSeconds > 10) {
+                let offlineCoins = diffSeconds * passiveSpeedSec;
+                let offlineEnergy = Math.floor(diffSeconds * 1); // 1 energy per second
+                
+                balance += offlineCoins;
+                energy += offlineEnergy;
+                if (energy > maxEnergy) energy = maxEnergy;
+                
+                setTimeout(() => {
+                    alert(`🚀 Welcome back, CEO!\n\nApp background mein kaam kar rahi thi.\nAapne offline rehte hue ${offlineCoins.toFixed(5)} RCN kamaye hain! 💰`);
+                }, 1000);
+            }
+        }
 
         const leaguesData = [
-            { name: "Bronze", target: 0 },
-            { name: "Silver", target: 1000 },
-            { name: "Gold", target: 10000 },
-            { name: "Platinum", target: 50000 },
-            { name: "Diamond", target: 100000 },
-            { name: "Epic", target: 500000 },
-            { name: "Legendary", target: 1000000 },
-            { name: "Master", target: 5000000 },
-            { name: "GrandMaster", target: 10000000 },
-            { name: "Lord", target: 50000000 }
+            { name: "Bronze", target: 0 }, { name: "Silver", target: 1000 },
+            { name: "Gold", target: 10000 }, { name: "Platinum", target: 50000 },
+            { name: "Diamond", target: 100000 }, { name: "Epic", target: 500000 },
+            { name: "Legendary", target: 1000000 }, { name: "Master", target: 5000000 },
+            { name: "GrandMaster", target: 10000000 }, { name: "Lord", target: 50000000 }
         ];
 
         const balanceEl = document.getElementById('balance');
@@ -303,6 +248,37 @@
         const energyBar = document.getElementById('energyBar');
         const earnPerTapText = document.getElementById('earn-per-tap-text');
         const maxEnergyText = document.getElementById('max-energy-text');
+
+        // --- SAVE DATA FUNCTION ---
+        function saveGameData() {
+            localStorage.setItem('balance', balance);
+            localStorage.setItem('energy', energy);
+            localStorage.setItem('maxEnergy', maxEnergy);
+            localStorage.setItem('multitapLevel', multitapLevel);
+            localStorage.setItem('elLevel', elLevel);
+            localStorage.setItem('elCost', elCost);
+            localStorage.setItem('mtCost', mtCost);
+            localStorage.setItem('dailyEnergyLimits', dailyEnergyLimits);
+            localStorage.setItem('lastLoginTime', Date.now()); // Waqt save ho raha hai
+        }
+
+        function copyReferralLink() {
+            let userId = "8426355512"; 
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+            let refLink = `https://t.me/RaccoonMining_bot?start=${userId}`;
+            
+            let tempInput = document.createElement("input");
+            tempInput.value = refLink;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            alert("✅ Invite link copied to clipboard!\n\n" + refLink);
+        }
 
         function formatNumber(num) {
             if(num >= 1000000) return (num/1000000) + 'M';
@@ -319,65 +295,56 @@
                 if(balance >= leaguesData[i].target) {
                     currentLevel = i + 1;
                     currentName = leaguesData[i].name;
-                    if(i + 1 < leaguesData.length) {
-                        nextTarget = formatNumber(leaguesData[i+1].target);
-                    }
+                    if(i + 1 < leaguesData.length) nextTarget = formatNumber(leaguesData[i+1].target);
                 }
             }
-            
             document.getElementById('league-name').innerText = currentName;
             document.getElementById('league-level').innerText = `Level ${currentLevel}/10`;
-            
-            if(nextTarget === "Max") {
-                document.getElementById('upgrade-need-text').innerText = "Max Level";
-            } else {
-                document.getElementById('upgrade-need-text').innerText = `Need ${nextTarget}`;
-            }
+            if(nextTarget === "Max") document.getElementById('upgrade-need-text').innerText = "Max Level";
+            else document.getElementById('upgrade-need-text').innerText = `Need ${nextTarget}`;
         }
 
         function updateBalanceDisplay() {
-            // Balance displayed to 5 decimal points now
             balanceEl.innerText = balance.toFixed(5);
             usdValueEl.innerText = `≈ $${(balance * coinPriceUSD).toFixed(3)}`;
             earnPerTapText.innerText = (baseEarn * multitapLevel).toFixed(5);
             maxEnergyText.innerText = maxEnergy;
+            
+            document.getElementById('mt-level').innerText = multitapLevel; 
+            document.getElementById('mt-cost').innerText = mtCost;
+            document.getElementById('el-level').innerText = elLevel; 
+            document.getElementById('el-cost').innerText = elCost;
+            document.getElementById('daily-energy-text').innerText = `${dailyEnergyLimits}/3 available`;
+
             checkLeagueStatus(); 
+            saveGameData(); 
         }
         updateBalanceDisplay();
 
         function registerTap(x, y) {
             let costPerTap = 1;
             if (energy < costPerTap) return;
-            
             balance += (baseEarn * multitapLevel); 
             energy -= costPerTap;
-            
             updateBalanceDisplay(); 
             energyEl.innerText = energy;
             energyBar.style.width = (energy / maxEnergy * 100) + '%'; 
-
-            if (tg && tg.HapticFeedback) { tg.HapticFeedback.impactOccurred('light'); }
-
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light'); 
             const floatText = document.createElement('div');
             floatText.classList.add('floating-text'); 
             floatText.innerText = '+' + multitapLevel; 
-            
             floatText.style.left = (x - 20) + 'px'; 
             floatText.style.top = (y - 30) + 'px';
             document.body.appendChild(floatText);
-            
             setTimeout(() => { floatText.remove(); }, 1000);
         }
 
         document.getElementById('coin').addEventListener('mousedown', (e) => { registerTap(e.clientX, e.clientY); });
         document.getElementById('coin').addEventListener('touchstart', (e) => {
             e.preventDefault(); 
-            for(let i = 0; i < e.changedTouches.length; i++) {
-                registerTap(e.changedTouches[i].clientX, e.changedTouches[i].clientY);
-            }
+            for(let i = 0; i < e.changedTouches.length; i++) registerTap(e.changedTouches[i].clientX, e.changedTouches[i].clientY);
         });
 
-        // 1 Second Interval for Passive Mining
         setInterval(() => {
             balance += passiveSpeedSec; 
             updateBalanceDisplay();
@@ -394,50 +361,30 @@
         function openLeague() {
             const listContainer = document.getElementById('leagues-list');
             listContainer.innerHTML = '';
-            
             const currentRankName = document.getElementById('league-name').innerText;
 
             leaguesData.forEach((l) => {
                 let status = "🔒 Locked";
                 let statusColor = "#8e8e93";
-                
-                if(balance >= l.target) {
-                    status = "✅ Unlocked";
-                    statusColor = "#32d74b";
-                }
-                
-                let bg = "#272a2f";
-                let border = "1px solid #3a3f47";
-                if (currentRankName === l.name) {
-                    bg = "#3a2d0d"; 
-                    border = "1px solid #f4c900";
-                    status = "▶ Current";
-                    statusColor = "#f4c900";
-                }
+                if(balance >= l.target) { status = "✅ Unlocked"; statusColor = "#32d74b"; }
+                let bg = "#272a2f"; let border = "1px solid #3a3f47";
+                if (currentRankName === l.name) { bg = "#3a2d0d"; border = "1px solid #f4c900"; status = "▶ Current"; statusColor = "#f4c900"; }
 
                 listContainer.innerHTML += `
                     <div class="boost-item" style="background: ${bg}; border: ${border}; cursor: default;">
                         <div style="font-size:30px;">🏆</div>
-                        <div style="flex-grow:1;">
-                            <div style="font-weight:bold; font-size:16px;">${l.name}</div>
-                            <div style="color:#8e8e93; font-size:12px;">From ${formatNumber(l.target)} Coins</div>
-                        </div>
+                        <div style="flex-grow:1;"><div style="font-weight:bold; font-size:16px;">${l.name}</div><div style="color:#8e8e93; font-size:12px;">From ${formatNumber(l.target)} Coins</div></div>
                         <div style="font-weight: bold; color: ${statusColor}; font-size: 12px;">${status}</div>
-                    </div>
-                `;
+                    </div>`;
             });
-            
             document.getElementById('league-modal').classList.add('active');
         }
         function closeLeague() { document.getElementById('league-modal').classList.remove('active'); }
 
         function useFullEnergy() {
             if(dailyEnergyLimits > 0) {
-                dailyEnergyLimits--;
-                energy = maxEnergy;
-                energyEl.innerText = energy;
-                energyBar.style.width = '100%';
-                document.getElementById('daily-energy-text').innerText = `${dailyEnergyLimits}/3 available`;
+                dailyEnergyLimits--; energy = maxEnergy; energyEl.innerText = energy; energyBar.style.width = '100%';
+                updateBalanceDisplay();
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
                 closeBoost();
             } else { alert("No more free energy left for today!"); }
@@ -445,11 +392,7 @@
 
         function buyMultitap() {
             if(balance >= mtCost) {
-                balance -= mtCost;
-                multitapLevel++;
-                mtCost = Math.floor(mtCost * 1.5); 
-                document.getElementById('mt-level').innerText = multitapLevel;
-                document.getElementById('mt-cost').innerText = mtCost;
+                balance -= mtCost; multitapLevel++; mtCost = Math.floor(mtCost * 1.5); 
                 updateBalanceDisplay();
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
             } else { alert("Not enough coins!"); }
@@ -457,42 +400,22 @@
 
         function buyEnergyLimit() {
             if(balance >= elCost) {
-                balance -= elCost;
-                elLevel++;
-                maxEnergy += 500; 
-                elCost = Math.floor(elCost * 1.5);
-                document.getElementById('el-level').innerText = elLevel;
-                document.getElementById('el-cost').innerText = elCost;
-                updateBalanceDisplay();
-                energyEl.innerText = energy;
-                energyBar.style.width = (energy / maxEnergy * 100) + '%'; 
+                balance -= elCost; elLevel++; maxEnergy += 500; elCost = Math.floor(elCost * 1.5);
+                updateBalanceDisplay(); energyEl.innerText = energy; energyBar.style.width = (energy / maxEnergy * 100) + '%'; 
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
             } else { alert("Not enough coins!"); }
         }
 
         function switchTab(tabId, element) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId + '-view').classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); element.classList.add('active');
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); document.getElementById(tabId + '-view').classList.add('active');
         }
-
         function doTask(btn, url, reward) {
             if(btn.innerText === "Completed ✅") return;
-            if(btn.innerText === "Start") {
-                window.open(url, '_blank'); 
-                btn.innerText = "Check";
-                btn.style.background = "#ff9500"; 
-            } else if(btn.innerText === "Check") {
-                btn.innerText = "Loading...";
-                btn.style.background = "#8e8e93";
-                setTimeout(() => {
-                    btn.innerText = "Completed ✅";
-                    btn.style.background = "#32d74b"; 
-                    balance += reward; 
-                    updateBalanceDisplay();
-                    if (tg && tg.HapticFeedback) { tg.HapticFeedback.notificationOccurred('success'); }
-                }, 2000);
+            if(btn.innerText === "Start") { window.open(url, '_blank'); btn.innerText = "Check"; btn.style.background = "#ff9500"; }
+            else if(btn.innerText === "Check") {
+                btn.innerText = "Loading..."; btn.style.background = "#8e8e93";
+                setTimeout(() => { btn.innerText = "Completed ✅"; btn.style.background = "#32d74b"; balance += reward; updateBalanceDisplay(); if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success'); }, 2000);
             }
         }
     </script>
