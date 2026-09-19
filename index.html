@@ -173,10 +173,9 @@
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg && tg.expand) { tg.expand(); }
 
-        // --- NEW NATIVE POPUP FUNCTION ---
         function customAlert(msg) {
             if (tg && tg.showAlert) {
-                tg.showAlert(msg); // 100% Native, No GitHub URL
+                tg.showAlert(msg); 
             } else {
                 alert(msg);
             }
@@ -214,6 +213,7 @@
         const coinPriceUSD = 3.00; 
         const passiveSpeedSec = 0.0625 / 3600; 
 
+        // Yahan maine English mein theek kar diya hai!
         let lastLoginTime = localStorage.getItem('lastLoginTime');
         if (lastLoginTime) {
             let now = Date.now();
@@ -225,7 +225,7 @@
                 energy += offlineEnergy;
                 if (energy > maxEnergy) energy = maxEnergy;
                 setTimeout(() => {
-                    customAlert(`🚀 Welcome back, CEO!\n\nApp background mein kaam kar rahi thi.\nAapne offline rehte hue ${offlineCoins.toFixed(5)} RCN kamaye hain! 💰`);
+                    customAlert(`🚀 Welcome back, CEO!\n\nYour exchange was working in the background.\nYou earned ${offlineCoins.toFixed(5)} RCN while you were offline! 💰`);
                 }, 1000);
             }
         }
