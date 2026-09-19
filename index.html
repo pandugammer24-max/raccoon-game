@@ -76,23 +76,13 @@
         .nav-item.active { color: #fff; background: #2f343c; }
         .nav-icon { font-size: 20px; }
 
-        /* VIP CUSTOM ALERT STYLES (No Domain Name Ever!) */
-        .custom-alert-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 10000;
-        }
+        /* VIP CUSTOM ALERT STYLES */
+        .custom-alert-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 10000; }
         .custom-alert-overlay.active { display: flex; }
-        .custom-alert-box {
-            background: #1c1f24; width: 85%; max-width: 320px; border-radius: 18px; padding: 25px; text-align: center; 
-            border: 1px solid #3a3f47; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-        }
+        .custom-alert-box { background: #1c1f24; width: 85%; max-width: 320px; border-radius: 18px; padding: 25px; text-align: center; border: 1px solid #3a3f47; box-shadow: 0 10px 25px rgba(0,0,0,0.5); animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .custom-alert-msg { color: #fff; font-size: 15px; margin-bottom: 25px; white-space: pre-line; line-height: 1.5; }
-        .custom-alert-btn {
-            background: #007aff; color: #fff; border: none; padding: 14px 0; width: 100%; border-radius: 12px; 
-            font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s;
-        }
+        .custom-alert-btn { background: #007aff; color: #fff; border: none; padding: 14px 0; width: 100%; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; }
         .custom-alert-btn:active { background: #005bb5; transform: scale(0.97); }
     </style>
 </head>
@@ -146,7 +136,7 @@
         <div class="stats-bar">
             <div class="stat-box"><div class="stat-label">Earn per tap</div><div class="stat-value"><div class="coin-icon-small"></div> +<span id="earn-per-tap-text">0.00001</span></div></div>
             <div class="stat-box" style="flex: 1.1;"><div class="stat-label">To upgrade level</div><div class="stat-value" id="upgrade-need-text">Need 1K</div></div>
-            <div class="stat-box"><div class="stat-label">Profit per hour</div><div class="stat-value profit"><div class="coin-icon-small"></div> +0.0625</div></div>
+            <div class="stat-box"><div class="stat-label">Profit per hour</div><div class="stat-value profit"><div class="coin-icon-small"></div> +<span id="profit-per-hour-text">0.0625</span></div></div>
         </div>
         <div class="main-balance-container">
             <div class="main-balance"><img src="https://cdn-icons-png.flaticon.com/512/1490/1490853.png" style="width: 45px;"><span id="balance">0.00000</span></div>
@@ -170,16 +160,29 @@
 
     <div id="friends-view" class="view-section">
         <div class="page-title">Invite Friends!</div><div class="friends-desc">Invite friends to get bonuses for both of you!</div>
-        <div class="reward-card"><div class="reward-icon"><img src="https://cdn-icons-png.flaticon.com/512/4213/4213958.png"></div><div class="reward-info"><div class="reward-title">Invite a friend</div><div class="reward-details"><span>For you:</span> <span class="highlight">+10% Speed</span></div><div class="reward-details"><span>For friend:</span> <span class="highlight-green">+0.1 RCN</span></div></div></div>
+        
+        <div class="reward-card" style="flex-direction: column; align-items: stretch; background: #272a2f;">
+            <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
+                <span style="color:#8e8e93; font-size: 14px;">Total Friends Joined:</span>
+                <span id="total-refs-text" style="font-weight:bold; font-size: 15px;">0</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom: 15px;">
+                <span style="color:#8e8e93; font-size: 14px;">Unclaimed Bonuses:</span>
+                <span id="pending-refs-text" style="font-weight:bold; color: #32d74b; font-size: 15px;">0</span>
+            </div>
+            <button id="claim-ref-btn" onclick="claimReferralBonus()" class="custom-alert-btn" style="background: #1c1f24; color: #8e8e93; font-size: 15px; padding: 12px; border: 1px solid #3a3f47;" disabled>Nothing to Claim</button>
+        </div>
+
+        <div class="reward-card"><div class="reward-icon"><img src="https://cdn-icons-png.flaticon.com/512/4213/4213958.png"></div><div class="reward-info"><div class="reward-title">Invite a friend</div><div class="reward-details"><span>For you:</span> <span class="highlight">+2.0 RCN & +10% Speed</span></div></div></div>
         <div class="invite-btn" onclick="copyReferralLink()">🔗 Copy Invite Link</div>
     </div>
 
     <div id="earn-view" class="view-section">
         <div class="page-title">Earn More Coins</div>
         <div class="task-list">
-            <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></div><div><div class="task-name">Subscribe YouTube</div><div class="task-reward">+2.0 RCN</div></div></div><div class="task-btn" onclick="doTask(this, 'https://youtube.com', 2.0)">Start</div></div>
-            <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"></div><div><div class="task-name">Follow Facebook</div><div class="task-reward">+1.5 RCN</div></div></div><div class="task-btn" onclick="doTask(this, 'https://facebook.com', 1.5)">Start</div></div>
-            <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></div><div><div class="task-name">Follow Instagram</div><div class="task-reward">+1.5 RCN</div></div></div><div class="task-btn" onclick="doTask(this, 'https://instagram.com', 1.5)">Start</div></div>
+            <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></div><div><div class="task-name">Subscribe YouTube</div><div class="task-reward">+2.0 RCN</div></div></div><div class="task-btn" id="btn-yt_sub" onclick="doTask(this, 'yt_sub', 'https://youtube.com', 2.0)">Start</div></div>
+            <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"></div><div><div class="task-name">Follow Facebook</div><div class="task-reward">+1.5 RCN</div></div></div><div class="task-btn" id="btn-fb_follow" onclick="doTask(this, 'fb_follow', 'https://facebook.com', 1.5)">Start</div></div>
+            <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></div><div><div class="task-name">Follow Instagram</div><div class="task-reward">+1.5 RCN</div></div></div><div class="task-btn" id="btn-ig_follow" onclick="doTask(this, 'ig_follow', 'https://instagram.com', 1.5)">Start</div></div>
         </div>
     </div>
 
@@ -200,16 +203,13 @@
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg && tg.expand) { tg.expand(); }
 
-        // THE ULTIMATE CUSTOM ALERT (NO MORE BROWSER DOMAINS)
         function customAlert(msg) {
             document.getElementById('custom-alert-text').innerText = msg;
             document.getElementById('custom-alert').classList.add('active');
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
         }
 
-        function closeCustomAlert() {
-            document.getElementById('custom-alert').classList.remove('active');
-        }
+        function closeCustomAlert() { document.getElementById('custom-alert').classList.remove('active'); }
         
         const urlParams = new URLSearchParams(window.location.search);
         const ceoName = urlParams.get('ceo');
@@ -236,18 +236,76 @@
         let elCost = storedELCost ? parseInt(storedELCost) : 10;
         let storedMTCost = localStorage.getItem('mtCost');
         let mtCost = storedMTCost ? parseInt(storedMTCost) : 10;
+        
         let storedLimits = localStorage.getItem('dailyEnergyLimits');
         let dailyEnergyLimits = storedLimits ? parseInt(storedLimits) : 3;
+        let lastBoostDate = localStorage.getItem('lastBoostDate');
+        let todayDate = new Date().toDateString();
+        
+        if (lastBoostDate !== todayDate) {
+            dailyEnergyLimits = 3;
+            localStorage.setItem('lastBoostDate', todayDate);
+            localStorage.setItem('dailyEnergyLimits', dailyEnergyLimits);
+        }
 
         let baseEarn = 0.00001; 
         const coinPriceUSD = 3.00; 
-        const passiveSpeedSec = 0.0625 / 3600; 
+
+        // --- UPDATED REFERRAL SYSTEM (+2.0 RCN AND +10% SPEED) ---
+        const totalRefs = parseInt(urlParams.get('refs') || 0);
+        let claimedRefs = parseInt(localStorage.getItem('claimedRefs') || 0);
+        
+        if (totalRefs < claimedRefs) claimedRefs = totalRefs; 
+        
+        let pendingRefs = totalRefs - claimedRefs;
+        const refRewardPerFriend = 2.0; // AB HAR DOST PAR 2.0 COINS MILENGE
+        
+        // 10% Mining Speed Boost Per Friend Calculation
+        let baseProfitPerHour = 0.0625;
+        let finalProfitPerHour = baseProfitPerHour + (baseProfitPerHour * 0.10 * totalRefs);
+        const passiveSpeedSec = finalProfitPerHour / 3600;
+
+        document.getElementById('total-refs-text').innerText = totalRefs;
+        document.getElementById('pending-refs-text').innerText = pendingRefs;
+        const claimBtn = document.getElementById('claim-ref-btn');
+
+        if (pendingRefs > 0) {
+            claimBtn.innerText = `Claim ${(pendingRefs * refRewardPerFriend).toFixed(2)} RCN`;
+            claimBtn.style.background = "#32d74b";
+            claimBtn.style.color = "#fff";
+            claimBtn.style.border = "none";
+            claimBtn.disabled = false;
+        }
+
+        function claimReferralBonus() {
+            if (pendingRefs > 0) {
+                let reward = pendingRefs * refRewardPerFriend;
+                balance += reward;
+                claimedRefs = totalRefs;
+                localStorage.setItem('claimedRefs', claimedRefs);
+                pendingRefs = 0;
+                
+                updateBalanceDisplay();
+                
+                document.getElementById('pending-refs-text').innerText = pendingRefs;
+                claimBtn.innerText = `Claimed ✅`;
+                claimBtn.style.background = "#1c1f24";
+                claimBtn.style.color = "#8e8e93";
+                claimBtn.style.border = "1px solid #3a3f47";
+                claimBtn.disabled = true;
+                
+                customAlert(`🎉 Congratulations!\nYou claimed ${reward.toFixed(2)} RCN from your invited friends!`);
+            }
+        }
 
         let lastLoginTime = localStorage.getItem('lastLoginTime');
         if (lastLoginTime) {
             let now = Date.now();
             let diffSeconds = (now - parseInt(lastLoginTime)) / 1000;
             if (diffSeconds > 10) {
+                if (diffSeconds > 86400) {
+                    diffSeconds = 86400; 
+                }
                 let offlineCoins = diffSeconds * passiveSpeedSec;
                 let offlineEnergy = Math.floor(diffSeconds * 1); 
                 balance += offlineCoins;
@@ -256,6 +314,46 @@
                 setTimeout(() => {
                     customAlert(`🚀 Welcome back, CEO!\n\nYour exchange was working in the background.\nYou earned ${offlineCoins.toFixed(5)} RCN while you were offline! 💰`);
                 }, 1000);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            ['yt_sub', 'fb_follow', 'ig_follow'].forEach(taskId => {
+                let status = localStorage.getItem(taskId);
+                if(status === 'completed') {
+                    let btn = document.getElementById('btn-' + taskId);
+                    if(btn) {
+                        btn.innerText = "Completed ✅";
+                        btn.style.background = "#32d74b";
+                        btn.style.pointerEvents = "none";
+                    }
+                }
+            });
+        });
+
+        function doTask(btn, taskId, url, reward) {
+            if(localStorage.getItem(taskId) === 'completed') return;
+            
+            if(btn.innerText === "Start") { 
+                window.open(url, '_blank'); 
+                btn.innerText = "Check"; 
+                btn.style.background = "#ff9500"; 
+            }
+            else if(btn.innerText === "Check") {
+                btn.style.pointerEvents = "none";
+                btn.innerText = "Loading..."; 
+                btn.style.background = "#8e8e93";
+                
+                setTimeout(() => { 
+                    btn.innerText = "Completed ✅"; 
+                    btn.style.background = "#32d74b"; 
+                    
+                    localStorage.setItem(taskId, 'completed'); 
+                    
+                    balance += reward; 
+                    updateBalanceDisplay(); 
+                    if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success'); 
+                }, 2000);
             }
         }
 
@@ -333,6 +431,9 @@
             earnPerTapText.innerText = (baseEarn * multitapLevel).toFixed(5);
             maxEnergyText.innerText = maxEnergy;
             
+            // SPEED DISPLAY UPDATE
+            document.getElementById('profit-per-hour-text').innerText = finalProfitPerHour.toFixed(4);
+            
             document.getElementById('mt-level').innerText = multitapLevel; 
             document.getElementById('mt-cost').innerText = mtCost;
             document.getElementById('el-level').innerText = elLevel; 
@@ -407,6 +508,7 @@
         function useFullEnergy() {
             if(dailyEnergyLimits > 0) {
                 dailyEnergyLimits--; energy = maxEnergy; energyEl.innerText = energy; energyBar.style.width = '100%';
+                localStorage.setItem('dailyEnergyLimits', dailyEnergyLimits);
                 updateBalanceDisplay();
                 if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
                 closeBoost();
@@ -432,14 +534,6 @@
         function switchTab(tabId, element) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active')); element.classList.add('active');
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); document.getElementById(tabId + '-view').classList.add('active');
-        }
-        function doTask(btn, url, reward) {
-            if(btn.innerText === "Completed ✅") return;
-            if(btn.innerText === "Start") { window.open(url, '_blank'); btn.innerText = "Check"; btn.style.background = "#ff9500"; }
-            else if(btn.innerText === "Check") {
-                btn.innerText = "Loading..."; btn.style.background = "#8e8e93";
-                setTimeout(() => { btn.innerText = "Completed ✅"; btn.style.background = "#32d74b"; balance += reward; updateBalanceDisplay(); if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success'); }, 2000);
-            }
         }
     </script>
 </body>
