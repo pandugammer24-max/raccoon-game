@@ -180,7 +180,9 @@
     <div id="earn-view" class="view-section">
         <div class="page-title">Earn More Coins</div>
         <div class="task-list">
-            <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></div><div><div class="task-name">Subscribe YouTube</div><div class="task-reward">+2.0 RCN</div></div></div><div class="task-btn" id="btn-yt_sub" onclick="doTask(this, 'yt_sub', 'https://youtube.com', 2.0)">Start</div></div>
+            <!-- YOUTUBE LINK UPDATED WITH SUBSCRIBE POPUP FORMULA -->
+            <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></div><div><div class="task-name">Subscribe YouTube</div><div class="task-reward">+2.0 RCN</div></div></div><div class="task-btn" id="btn-yt_sub" onclick="doTask(this, 'yt_sub', 'https://www.youtube.com/@RaccoonMining_bot?sub_confirmation=1', 2.0)">Start</div></div>
+            
             <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"></div><div><div class="task-name">Follow Facebook</div><div class="task-reward">+1.5 RCN</div></div></div><div class="task-btn" id="btn-fb_follow" onclick="doTask(this, 'fb_follow', 'https://facebook.com', 1.5)">Start</div></div>
             <div class="task-item"><div class="task-left"><div class="task-icon"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></div><div><div class="task-name">Follow Instagram</div><div class="task-reward">+1.5 RCN</div></div></div><div class="task-btn" id="btn-ig_follow" onclick="doTask(this, 'ig_follow', 'https://instagram.com', 1.5)">Start</div></div>
         </div>
@@ -251,16 +253,15 @@
         let baseEarn = 0.00001; 
         const coinPriceUSD = 3.00; 
 
-        // --- UPDATED REFERRAL SYSTEM (+2.0 RCN AND +10% SPEED) ---
+        // --- REFERRAL SYSTEM (+2.0 RCN AND +10% SPEED) ---
         const totalRefs = parseInt(urlParams.get('refs') || 0);
         let claimedRefs = parseInt(localStorage.getItem('claimedRefs') || 0);
         
         if (totalRefs < claimedRefs) claimedRefs = totalRefs; 
         
         let pendingRefs = totalRefs - claimedRefs;
-        const refRewardPerFriend = 2.0; // AB HAR DOST PAR 2.0 COINS MILENGE
+        const refRewardPerFriend = 2.0; 
         
-        // 10% Mining Speed Boost Per Friend Calculation
         let baseProfitPerHour = 0.0625;
         let finalProfitPerHour = baseProfitPerHour + (baseProfitPerHour * 0.10 * totalRefs);
         const passiveSpeedSec = finalProfitPerHour / 3600;
@@ -431,7 +432,6 @@
             earnPerTapText.innerText = (baseEarn * multitapLevel).toFixed(5);
             maxEnergyText.innerText = maxEnergy;
             
-            // SPEED DISPLAY UPDATE
             document.getElementById('profit-per-hour-text').innerText = finalProfitPerHour.toFixed(4);
             
             document.getElementById('mt-level').innerText = multitapLevel; 
